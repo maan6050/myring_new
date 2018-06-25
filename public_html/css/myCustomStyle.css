@@ -1,0 +1,189 @@
+/*
+Theme Name: My Ring Ring
+Author: Haggen IT - Diseño y desarrollo web
+Author URI: http://www.haggen-it.com/
+Version: 1.0
+*/
+/*---------------My Custom Header Styles-----------------*/
+.navbar{
+    clear: both;
+    box-shadow: 3px 3px 3px #999;
+    margin: 0 0 30px 0;
+    background: #008AB7;
+    border-radius: 0px;
+    width: 100%;
+    display: inline-block;
+}
+.navbar-header {
+    width:38%;
+}
+.navbar-brand {
+    height:auto;
+    width:28%;
+    padding: 10px 0 10px 15px;
+}
+.navbar-toggle {
+    position: absolute;
+    right: 0px;
+    border: 1px solid #fff;
+}
+.navbar-toggle .icon-bar {
+    color: #fff;
+    background: #fff;
+}
+.navbar-brand > img {
+    width:100%;
+}
+.headerTopPhone {
+    float: left;
+    background: none;
+    padding: 5px 10px;
+    font-size: 16px;
+    color: #FFF;
+    border-radius: 3px;
+    margin: 10px 0 0 10px;
+}
+.headerTopPhone a {
+    color: #FFF;
+    font-weight: 700;
+}
+.headerTopPhone a:hover {
+    color: #FEBE10;
+    text-decoration: underline;
+}
+.headerTopRight {
+    float: right;
+    font-size: 13px;
+    color: #FFF;
+    margin: 15px 15px 0 0;
+    text-align: right;
+}
+.headerTopRight a {
+    color: #fff;
+}
+.headerTopRight a:hover {
+    color: #FEBE10;
+    text-decoration: underline;
+}
+.navbar-nav {
+    float: right;
+    margin: 45px 0 0 0;
+}
+.navbar-nav > li > a {
+    text-transform: uppercase;
+    color: #FFF;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 5px 5px 0 0;
+    transition: 0ms;
+}
+.navbar-nav > li > a:hover{
+    color:#333;
+    text-decoration: underline;
+    background: #FEBE10;
+}
+.dropdown-menu {
+    position: absolute;
+    top: 36px;
+    left: 0;
+    background: #FFF;
+    border-top: 3px solid #febe10;
+    z-index: 2;
+    box-shadow: 1px 3px 5px #999;
+    font-weight: normal;
+    transition: 0.3s ease;
+    display: none;
+    width: 183px;
+    border-radius: 0px;
+    padding:0px;
+}
+.dropdown {
+    padding: 0 26px 0 0;
+}
+.dropdown-menu li a{
+    display: block;
+    text-transform: none;
+    color: #333;
+    background: #F0F0F0;
+    margin: 5px;
+    padding: 0 15px;
+    font-weight: normal;
+    line-height: 32px;
+    min-width: 150px;
+    font-size: 13px;
+    transition: 0ms;
+}
+.dropdown-menu li:hover{
+    background: #febe10;
+}
+.dropdown-menu li a:hover{
+    background: #013a65;
+    color: #FFF !important;
+    text-decoration: underline;
+}
+.visible .dropdown-menu {
+    display:block !important;
+}
+.visible:hover .dropdown-toggle {
+    color:#333;
+    text-decoration: underline;
+    background: #FEBE10;
+}
+.collapse{
+    float: right;
+    width: 62%;
+}
+.navbar-nav li:last-child{
+    padding-right: 0px;
+}
+@media (max-width: 1199px) {
+    .dropdown {
+        padding: 0 15px 0 0 !important;
+    }
+    .navbar-nav li:last-child{
+        padding-right: 0px !important;
+    }
+    .headerTopPhone {
+        font-size: 14px !important;
+    }
+}
+@media (max-width: 991px) {
+    .dropdown {
+        padding: 0 0px 0 0 !important;
+    }
+    .dropdown-toggle {
+        font-size: 13px !important;
+    }
+    .headerTopPhone {
+        font-size: 13px !important;
+        margin: 15px 0 0 15px !important;
+        padding: 0px !important;
+    }
+    .navbar-nav {
+        margin: 25px 0 0 0 !important;
+    }
+}
+@media (max-width: 767px) {
+    .navbar-header {
+        width: 100% !important;
+        text-align: center !important;
+        margin: 0px !important;
+    }
+    .navbar-brand {
+        width: 100% !important; 
+    }
+    .navbar-brand > img {
+        width: 20% !important;
+        margin: 0 auto !important;
+    }
+    .headerTopPhone {
+        float: none !important
+    }
+    .headerTopRight {
+        float: none !important;
+        margin: 0px 0px 10px 0 !important; 
+        text-align: center !important;
+        width: 100% !important;
+        display: inline-block !important;
+    }
+}

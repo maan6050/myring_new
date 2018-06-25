@@ -1,6 +1,6 @@
 <?php
 /**
- * Modelo para la realización de operaciones sobre las tablas de la BD relacionadas con los clientes.
+ * Modelo para la realizaciï¿½n de operaciones sobre las tablas de la BD relacionadas con los clientes.
  * Creado: Enero 20, 2017
  * Modificaciones: CZapata
  */
@@ -9,7 +9,7 @@ class Customers extends CI_Model
 {
 	/**
 	 * __construct
-	 * Método constructor.
+	 * Mï¿½todo constructor.
 	 */
 	public function __construct()
 	{
@@ -25,7 +25,7 @@ class Customers extends CI_Model
 	public function create($data)
 	{
 		$this->db->insert('customers', $data);
-		return $this->db->insert_id();  // Devuelve el id del registro recién insertado.
+		return $this->db->insert_id();  // Devuelve el id del registro reciï¿½n insertado.
 	}
 
 	/**
@@ -41,17 +41,17 @@ class Customers extends CI_Model
 
 	/**
 	 * getAll
-	 * Obtiene los datos de todos los clientes en orden alfabético.
+	 * Obtiene los datos de todos los clientes en orden alfabï¿½tico.
 	 */
 	public function getEmployee($username, $pass = '')
 	{
 		$this->db->select('	customers.COMPANY,customers.COUNTRY_CODE,customers.COUNTRY,CL.CTY_SHORT, ACC.PARENT_ACCOUNT_ID,CL.CTY_NAME, U.ENABLED, customers.CUSTOMER_ENC, U.FIRST_NAME AS UFIRST_NAME, U.LAST_NAME AS ULAST_NAME, UG.USER_GROUP_ENC, ACC.ACCOUNT_ID, ACC.ACCOUNT_ENC, U.LOGIN_NAME, customers.ALLOW_PROD_TYPES,customers.THERMAL_RECEIPT,customers.TOUCHSCREEN,customers.CC_ENABLED,U.USER_TYPE,U.END_USER_VARIFY, UG.USER_GROUP_NAME');
 		
-		$this->db->join('ACCOUNTS ACC', 'customers.CUSTOMER_ID = ACC.CUSTOMER_ID', 'INNER');
-		$this->db->join('ACCOUNT_TYPES AT', 'ACC.ACCOUNT_TYPE = AT.ACCOUNT_TYPE', 'INNER');
-		$this->db->join('USERS U', 'customers.CUSTOMER_ENC = U.CUSTOMER_ID_ENC', 'INNER');
-		$this->db->join('USER_GROUPS UG', 'U.USER_TYPE = UG.USER_GROUP_ID', 'INNER');
-		$this->db->join('COUNTRY_LIST CL', ' (customers.COUNTRY = CL.CTY_ID) ', 'LEFT');
+		$this->db->join('accounts ACC', 'customers.CUSTOMER_ID = ACC.CUSTOMER_ID', 'INNER');
+		$this->db->join('account_types AT', 'ACC.ACCOUNT_TYPE = AT.ACCOUNT_TYPE', 'INNER');
+		$this->db->join('users U', 'customers.CUSTOMER_ENC = U.CUSTOMER_ID_ENC', 'INNER');
+		$this->db->join('user_groups UG', 'U.USER_TYPE = UG.USER_GROUP_ID', 'INNER');
+		$this->db->join('country_list CL', ' (customers.COUNTRY = CL.CTY_ID) ', 'LEFT');
 		
 		$query = $this->db->get_where('customers', array('U.LOGIN_NAME' => $username, 'U.LOGIN_PASSWORD' => $pass)); //, 'LOGIN_PASSWORD_NEW' => $pass
 		$rows = $query->result();
@@ -81,7 +81,7 @@ class Customers extends CI_Model
 	public function update($id, $data)
 	{
 		$this->db->where('id', $id);
-		return $this->db->update('CUSTOMERS', $data);  // Devuelve TRUE en caso de éxito.
+		return $this->db->update('CUSTOMERS', $data);  // Devuelve TRUE en caso de ï¿½xito.
 	}
 
 }

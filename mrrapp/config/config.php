@@ -23,16 +23,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = $_SERVER['SERVER_NAME'] == 'myring.new' ? 'http://myring.new' : 'http://www.myringring.net';
+$config['base_url'] = $_SERVER['SERVER_NAME'] == 'localhost' ? 'http://localhost' : 'http://www.myringring.net';
 if($_SERVER['SERVER_PORT'] != '80')
 {
 	$config['base_url'] .= ':'.$_SERVER['SERVER_PORT'];
 }
 if($_SERVER['SERVER_NAME'] == 'localhost')
 {
-	$config['base_url'] .= '/myringring/';
+	$config['base_url'] .= '/';
 }
-
 /*
 |--------------------------------------------------------------------------
 | Index File
