@@ -19,12 +19,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 		<? /* Favicon */ ?>
 		<link rel="icon" type="image/png" href="<?= base_url('images/logo-myringring.png'); ?>">
-
+		<? /* Bootstrap Css*/ ?>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<? /* My Custom Css */ ?>
+		<link rel="stylesheet" type="text/css" href="<?= base_url('css/myCustomStyle.css'); ?>">
 		<? /* Etiquetas responsive */ ?>
 		<meta name="viewport" content="width=device-width">
 		<meta name="format-detection" content="telephone=no">
-
-		<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<? /* Bootstrap Js*/ ?>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="<?= base_url('js/jquery.validate.min.js'); ?>"></script>
 		<script src="<?= base_url('js/bxslider/jquery.bxslider.min.js'); ?>"></script>
 		<script src="<?= base_url('js/intl-tel-input/js/intlTelInput.js'); ?>"></script>
@@ -32,6 +37,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<script src="<?= base_url('js/sweetalert/sweetalert.min.js'); ?>"></script>
 		<script src="<?= base_url('js/fancybox/jquery.fancybox.pack.js'); ?>"></script>
 		<script src="<?= base_url('js/modules/utilities.js'); ?>"></script>
+		<? /* My Custom Java Script */ ?>
+		<script src="<?= base_url('js/myCustomJavaScript.js'); ?>"></script>
 
 		<script type="text/javascript"><!--
 			document.createElement("nav");
@@ -82,117 +89,81 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<link type="text/css" href="<?= base_url('css/style.css'); ?>" rel="stylesheet">
 	</head>
 	<body>
-		<div class="pageHeader">
-			<div class="centeredContent">
-				<div class="logo">
-					<a href="<?= base_url(); ?>"><img src="<?= base_url('images/logo-myringring.png'); ?>" alt=""></a>
-				</div>
-				<div class="headerRight">
-					<div class="topMenu">
-						<div class="fRight">
-							[ <strong><?= $_SESSION['userName']; ?></strong> ]&nbsp; &nbsp;
-							<a href="<?= base_url('home/account'); ?>"><?= lang('my_account'); ?></a>&nbsp; |&nbsp;
-							<a href="<?= base_url('home/logout'); ?>"><?= lang('logout'); ?></a>
-						</div>
-						<div class="clear10"></div><?
-
-						if($_SESSION['userType'] == STORE)
-						{
-							$balanceStore = getBalanceStore(); ?>
-							<?= lang('balance'); ?>  <strong>$<?= number_format($balanceStore->balance, 2, '.', ','); ?></strong>&nbsp; |&nbsp;
-							<?= lang('available'); ?>  <strong>$<?= number_format($balanceStore->available, 2, '.', ','); ?></strong>&nbsp;&nbsp;&nbsp;
-							<a href="" onClick="changeLanguage('en')"><img src="<?= base_url('images/EN.png'); ?>" alt="">&nbsp;<?= lang('english'); ?></a>&nbsp; |&nbsp;
-							<a href="" onClick="changeLanguage('es')"><img src="<?= base_url('images/ES.png'); ?>" alt="">&nbsp;<?= lang('spanish'); ?></a><?
-						} ?>
-					</div>
-					<div class="clear"></div>
-					<ul class="pageMenu">
-						<li><a href="<?= base_url('home'); ?>"><?= lang('home'); ?></a></li><?
-						if($_SESSION['userType'] == STORE)
-						{ ?>
-							<li><a href="<?= base_url('pinlessAdminCtrl'); ?>"><?= lang('link_pinless'); ?></a></li>
-							<li>
-								<a href="#"><?= lang('customer_support'); ?></a>
-								<ul class="submenu">
-									<li><a href="<?= base_url('clientCtrl/transactionsList'); ?>"><?= lang('recent_transactions'); ?></a></li>
-									<li><a href="<?= base_url('clientCtrl/pinlessAccess'); ?>"><?= lang('pinless_access'); ?></a></li>
-									<li><a href="<?= base_url('clientCtrl/ratesList'); ?>"><?= lang('rates_list'); ?></a></li>
-									<li><a href="<?= base_url('clientCtrl/feeList'); ?>"><?= lang('fee_list'); ?></a></li>
-								</ul>
-							</li>
-							<li>
-								<a href="#"><?= lang('reports'); ?></a>
-								<ul class="submenu">
-									<li><a href="<?= base_url('reportsCtrl/invoices'); ?>"><?= lang('reports_invoices'); ?></a></li>
-									<li><a href="<?= base_url('report/recentDeposit'); ?>"><?= lang('my_payments'); ?></a></li>
-									<li><a href="<?= base_url('report/salesByProduct'); ?>"><?= lang('sales_by_product'); ?></a></li>
-									<li><a href="<?= base_url('report/guestsNumbers'); ?>"><?= lang('guest_numbers'); ?></a></li>
-									<!--li><a href="<?= base_url('report/pdf'); ?>">Pdf</a></li-->
-								</ul>
-							</li><?
-						}
-						elseif($_SESSION['userType'] == ADMIN)
-						{ ?>
-							<li><a href="<?= base_url('depositCtrl'); ?>">Deposit</a></li>
-							<li><a href="<?= base_url('admin/transactionsList'); ?>">Recent transactions</a></li>
-							<li>
-								<a href="#">Reports</a>
-								<ul class="submenu">
-									<li><a href="<?= base_url('reportsCtrl/invoices'); ?>"><?= lang('reports_invoices'); ?></a></li>
-									<li><a href="<?= base_url('report/recentDeposit'); ?>">Recent deposits</a></li>
-									<li><a href="<?= base_url('report/invoices'); ?>">Invoices</a></li>
-									<li><a href="<?= base_url('report/reconcile'); ?>">Reconcile</a></li>
-									<li><a href="<?= base_url('report/salesBySeller'); ?>">Sales by agent</a></li>
-									<li><a href="<?= base_url('report/sellerEarnings'); ?>">Agents earnings</a></li>
-									<li><a href="<?= base_url('report/companyEarnings'); ?>">Company earnings</a></li>
-								</ul>
-							</li>
-							<li>
-								<a href="#">Admin</a>
-								<ul class="submenu">
-									<li><a href="<?= base_url('admin/usersList'); ?>">Users</a></li>
-									<li><a href="<?= base_url('report/guestsNumbers'); ?>">Guest's Numbers</a></li>
-									<li><a href="<?= base_url('admin/sellersList'); ?>">Agents</a></li>
-									<li><a href="<?= base_url('admin/storesList'); ?>">Stores</a></li>
-									<li><a href="<?= base_url('admin/providersList'); ?>">Providers</a></li>
-									<li><a href="<?= base_url('admin/countriesList'); ?>">Countries</a></li>
-									<li><a href="<?= base_url('admin/productsList'); ?>">Products</a></li>
-									<li><a href="<?= base_url('content/newsList'); ?>">News</a></li>
-									<li><a href="<?= base_url('content/slidesList'); ?>">Slides</a></li>
-									<li><a href="<?= base_url('admin/contents'); ?>"><?= lang('contents'); ?></a></li>
-								</ul>
-							</li><?
-						}
-						elseif($_SESSION['userType'] == SELLER)
-						{ ?>
-							<li><a href="<?= base_url('seller/storesList'); ?>">Stores</a></li>
-							<li><a href="<?= base_url('depositCtrl'); ?>">Deposit</a></li>
-							<li><a href="<?= base_url('seller/transactionsList'); ?>">Recent transactions</a></li>
-							<li>
-								<a href="#">Reports</a>
-								<ul class="submenu">
-									<li><a href="<?= base_url('reportsCtrl/invoices'); ?>"><?= lang('reports_invoices'); ?></a></li>
-								</ul>
-							</li>
-						  <?
-						} elseif($_SESSION['userType'] == "OWNER")
-						{ ?>
-							<li><a href="<?= base_url('seller/storesList'); ?>">Stores</a></li>
-							<li><a href="<?= base_url('depositCtrl'); ?>">Deposit</a></li>
-							<li><a href="<?= base_url('seller/transactionsList'); ?>">Recent transactions</a></li>
-							<li>
-								<a href="#">Reports</a>
-								<ul class="submenu">
-									<li><a href="<?= base_url('reportsCtrl/invoices'); ?>"><?= lang('reports_invoices'); ?></a></li>
-								</ul>
-							</li>
-						  <?
-						} ?>
-					</ul>
-				</div>
-				<div class="topPhone">
-					<p><?= lang('customer_service'); ?> <a href="tel:18888137485">1 888 8137485</a></p>
-				</div>
-				<div class="clear"></div>
+	<nav class="navbar">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>                        
+				</button>
+				<a class="navbar-brand" href="<?= base_url(); ?>"><img src="<?= base_url('images/logo-myringring.png'); ?>" alt=""></a>
+				<p class="headerTopPhone"><?= lang('customer_service'); ?> <a href="tel:18888137485">1 888 8137485</a></p>
+			</div>
+			<div class="headerTopRight">
+				[ <strong><?= $_SESSION['userName']; ?></strong> ]&nbsp; &nbsp;
+				<a href="<?= base_url('home/account'); ?>"><?= lang('my_account'); ?></a>&nbsp; |&nbsp;
+				<a href="<?= base_url('home/logout'); ?>"><?= lang('logout'); ?></a><?
+				if($_SESSION['userType'] == STORE)
+				{
+					$balanceStore = getBalanceStore(); ?>
+					<?= lang('balance'); ?>  <strong>$<?= number_format($balanceStore->balance, 2, '.', ','); ?></strong>&nbsp; |&nbsp;
+					<?= lang('available'); ?>  <strong>$<?= number_format($balanceStore->available, 2, '.', ','); ?></strong>&nbsp;&nbsp;&nbsp;
+					<a href="" onClick="changeLanguage('en')"><img src="<?= base_url('images/EN.png'); ?>" alt="">&nbsp;<?= lang('english'); ?></a>&nbsp; |&nbsp;
+					<a href="" onClick="changeLanguage('es')"><img src="<?= base_url('images/ES.png'); ?>" alt="">&nbsp;<?= lang('spanish'); ?></a><?
+				} ?>
+			</div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav"> <?
+					if($_SESSION['userType'] == "OWNER")
+					{ ?>
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="<?= base_url('home'); ?>"><?= lang('home'); ?> <!--<span class="caret"></span>--></a>
+							<ul class="dropdown-menu">
+								<li><a href="<?= base_url('CustomerCtrl/masters'); ?>"><?= lang('masters'); ?></a></li>
+								<li><a href="<?= base_url('CustomerCtrl/users'); ?>"><?= lang('users'); ?></a></li>
+								<li><a href="<?= base_url('CustomerCtrl/profile'); ?>"><?= lang('profile'); ?></a></li>
+								<li><a href="<?= base_url('CustomerCtrl/viewLevels'); ?>"><?= lang('view_levels'); ?></a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#"><?= lang('menu_providers'); ?></a>
+							<ul class="dropdown-menu">
+								<li><a href="<?= base_url('CustomerCtrl/viewProviders'); ?>"><?= lang('view_providers'); ?></a></li>
+								<li><a href="<?= base_url('CustomerCtrl/viewProducts'); ?>"><?= lang('view_products'); ?></a></li>
+								<li><a href="<?= base_url('CustomerCtrl/productPlans'); ?>"><?= lang('product_plans'); ?></a></li>
+							</ul>
+						</li> 
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#"><?= lang('menu_records'); ?></a>
+							<ul class="dropdown-menu">
+								<li><a href="<?= base_url('CustomerCtrl/transactionLogs'); ?>"><?= lang('transaction_logs'); ?></a></li>
+								<li><a href="<?= base_url('CustomerCtrl/transactionHistory'); ?>"><?= lang('transaction_history'); ?></a></li>
+							</ul>
+						</li> 
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#"><?= lang('menu_reports'); ?></a>
+							<ul class="dropdown-menu">
+								<li><a href="<?= base_url('CustomerCtrl/salesByProductType'); ?>"><?= lang('sales_by_product_type'); ?></a></li>
+								<li><a href="<?= base_url('CustomerCtrl/salesByProduct'); ?>"><?= lang('sales_by_product'); ?></a></li>
+								<li><a href="<?= base_url('CustomerCtrl/salesByMasters'); ?>"><?= lang('sales_by_masters'); ?></a></li>
+								<li><a href="<?= base_url('CustomerCtrl/salesByProvider'); ?>"><?= lang('sales_by_provider'); ?></a></li>
+								<li><a href="<?= base_url('CustomerCtrl/salesByEndUsers'); ?>"><?= lang('sales_by_end_users'); ?></a></li>
+								<li><a href="<?= base_url('CustomerCtrl/unsuccessTransactions'); ?>"><?= lang('unsuccess_transactions'); ?></a></li>
+								<li><a href="<?= base_url('CustomerCtrl/customerReport'); ?>"><?= lang('customer_report'); ?></a></li>
+								<li><a href="<?= base_url('CustomerCtrl/paymentReport'); ?>"><?= lang('payment_report'); ?></a></li>
+							</ul>
+						</li> 
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#"><?= lang('menu_web_content'); ?></a>
+							<ul class="dropdown-menu">
+								<li><a href="<?= base_url('CustomerCtrl/storeDailyPromos'); ?>"><?= lang('store_daily_promos'); ?></a></li>
+							</ul>
+						</li><?
+					} ?>
+				</ul>
 			</div>
 		</div>
+	</nav>	
+<? echo exit; ?>
+	

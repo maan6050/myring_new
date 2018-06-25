@@ -21,7 +21,7 @@ class ReportsCtrl extends MY_Controller
 
 	public function invoices()
 	{
-        $this->load->model('reportsModel');
+		$this->load->model('reportsModel');
 
         // por defecto el id del cliente o id de vendedor.
 		$stores = $_SESSION['userId'];

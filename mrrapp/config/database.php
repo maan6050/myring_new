@@ -70,14 +70,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
-$active_group = $_SERVER['SERVER_NAME'] == 'myring.new' ? 'default' : 'prod';
+//$active_group = $_SERVER['SERVER_NAME'] == 'myring.new' ? 'default' : 'prod';
+$active_group = $_SERVER['SERVER_NAME'] == 'localhost' ? 'default' : 'prod';
 $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
+	'username' => 'admin',
+	'password' => '123',
 	'database' => 'myring',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

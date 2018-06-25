@@ -28,7 +28,6 @@ class Login extends MY_Controller {
 		if($this->form_validation->run() !== FALSE)
 		{
 			$items = $this->input->post(NULL, TRUE);
-		
 			$this->load->model('customers');
 			$row = $this->customers->getEmployee($items['un'],$items['pw']);  // Ahora busco si es un cliente.
 			if(!empty($row))
