@@ -10,7 +10,6 @@ class Home extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-
 		if(!isset($_SESSION['userId']))
 		{
 			redirect(base_url('login'));  // El usuario no ha iniciado sesión.
@@ -33,8 +32,10 @@ class Home extends MY_Controller
 	public function index()
 	{
 		$data['title'] = 'Home';
+		//redirect(base_url('home/logout'));
 		switch($_SESSION['userType'])
 		{
+			
 			case ADMIN:
 				$this->load->model('client');
 				$this->load->model('deposit');
@@ -74,7 +75,7 @@ class Home extends MY_Controller
 				$ids = $preferred = $defaultCountry = '';
 				foreach($countries as $country)
 				{
-					$ids .= '"'.$country->id.'", ';
+					$ids .= '"'.$country->CTY_ID.'", ';
 					if($country->preferred == 'Yes')
 					{
 						$preferred .= '"'.$country->id.'", ';
@@ -98,8 +99,31 @@ class Home extends MY_Controller
 				$view = 'home';
 				break;
 			case "OWNER":
-				$view = 'home';
+				$view = 'home'; 
 				break;
+			case "MASTER";
+				$view = "home";	
+			case "DISTRIBUTOR";
+				$view = "home";
+			case "SUBDISTRIBUTOR";
+				$view = "home";	
+			case "STORE";
+				$view = "home";			
+				$this->load->model('slide');
+				$this->load->model('news');
+				$this->load->model('country');
+				$countries = $this->country->getAll('1');
+				$ids = $preferred = $defaultCountry = '';
+				foreach($countries as $country)
+				{
+					$ids .= '"'.$country->ISO2_CODE.'", ';
+				}
+				$data['ids'] = substr($ids, 0, -2);  // Quito la última coma.
+				$data['preferred'] = substr($ids, 0, -2);
+				$data['max'] = '1000';
+				$data['cart'] = $this->_getLatestTopups();
+				$data['slides'] = $this->slide->getAll();
+				$data['news'] = $this->news->getAll();
 		}
 		$this->load->view('header', $data);
 		$this->load->view($view, $data);
@@ -157,69 +181,103 @@ class Home extends MY_Controller
 
 	public function addFunds()
 	{
-		$this->load->model('client');
+		$items = $this->input->post(NULL, TRUE);
+		
 		$this->load->model('country');
 		$this->load->model('phonebook');
-		$this->load->model('product');
+		$this->load->model('products');
+		
+		if(isset($items["card_id"])){
+			$card_id = $items["card_id"];
+			$v_balance = $items["amount"];
+		}else{
+			$card_id = $items["amount"];
+		}
+
+		$current_date = date("Y/m/d");
+		$current_date_time = date("Y-m-d H:i:sa");
+		$recharge_phone = $items["phoneInput"];
+		$api_response_code = 0;
+		$SENDNOTIFICATION = 0;
+		$v_phone = $items["clientPhone"];
+		$cookie_country_v_phone = $_COOKIE["country"].$v_phone;
+		
+		$product = $this->products->getCardProdDetails($card_id);
+		if(empty($data)){
+			//product not setup correctly 
+		}
+		
+		$face_value 	= $product->FACE_VALUE;
+		$prod_id 		= $product->PROD_ID;	
+		$item_id 		= $product->CARD_ID;
+		$prod_code 		= $product->PROD_CODE;
+		$prod_fee 		= $product->PROD_FEE;
+		$prod_provider 	= $product->PROD_PROVIDER;
+		if(!isset($v_balance)){
+			$v_balance = $face_value;
+		}
+		
+		$gen_code = uniqid();
+		$currency = "USD";
+		$CONVERSION_RATE ="1";
+ 
+		if($prod_fee > 0){
+			$v_balance  = $v_balance  + $prod_fee;
+			
+		}	
+		$TotalAmountIncExtraCharge = $v_balance; 
+		$extratax =0;
+		
 		$this->load->model('transaction');
 		$this->load->model('slide');
 		$this->load->model('news');
-		$client = $this->client->getById($_SESSION['userId'], STORE);
-		$max = $client->maxBalance - $client->balance;
 		if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['productId']))  // Se envió el formulario de recarga.
 		{
-			$items = $this->input->post(NULL, TRUE);
 			// Valido que no haya hecho una transacción del mismo cliente para el mismo número en los últimos cinco minutos.
 			$existingTr = $this->transaction->transactionExists($items['productId'], $items['clientPhone'], $items['phone']);
 			if(empty($existingTr))
 			{
-				if($amountFromList = getArrayValue($items, 'amountfromlist'))
-				{
-					$items['amount'] = $amountFromList;
-				}
 				// Valido que el depósito no exceda el límite.
-				if($items['amount'] <= $max)
-				{
-					$product = $this->product->getById($items['productId']);
-					// Determino si este producto muestra un valor diferente al valor a recargar.
-					if($product->type == 'f' && strpos($product->fixed, '|') !== FALSE)
-					{
-						if($product->includeCharge > 0)
-						{
-							$clientAmount = $items['amount'];
-						}
-						else
-						{
-							// Este es el valor por defecto de la recarga.
-							$clientAmount = $items['amount'];
-							$fixed = explode(',', $product->fixed);
-							foreach($fixed as $f)
-							{
-								$value = explode('|', $f);
-								// Con el valor de la recarga determino cuál fue el valor mostrado.
-								if($items['amount'] == $value[0])
-								{
-									// Voy a almacenar el valor que el cliente vio en pantalla.
-									$clientAmount = $value[1];
-								}
-							}
-						}
+				$validate_amount = $this->products->validateFundsWithAllLevels($v_balance);
+		
+				
+				
+				if($validate_amount){
+					//ready to transaction if $validate_amount is true
+					$ExternalID = $this->products->addSoldEntry($prod_id,$item_id,$prod_provider,$prod_code,$current_date_time);
+					if($prod_fee > 0){
+						$v_balance  = $v_balance - $prod_fee;
 					}
-					else
-					{
-						// El valor a recargar es el mismo que se muestra.
-						$clientAmount = $items['amount'];
-					}
+					
 					// Obtengo el porcentaje de ganancia.
-					$profitPercent = $this->client->getProfitPercent($_SESSION['userId'], $items['productId']);
-					switch($product->providerId)
+					
+					//static variables for testing
+					$providerId = "DPPINLESS0";
+					$product->offeringId = "30128590";
+					$profitPercent = 0;
+					$clientAmount =0;
+					$product->serviceCharge = 0;
+					$product->includeCharge = 0;
+					$product->isPIN = 0;
+					$product->defaultProfit = 0;
+					$product->defaultUserProfit = 0;
+					$product->companyProfit =0;
+					
+					
+					$items['amount'] = $v_balance;
+					
+					
+					
+					
+					//CAll APIS////////////////////////////////////////////////////////
+					switch($providerId)
 					{
 						case 'CERETEL':
 							$ceretelCtrl = new CeretelProviderController($this);
 							$data = $ceretelCtrl->addFunds(
 								$items['clientPhone'],
 								$items['phone'],
-								$product->offeringId,
+								$$product->offeringId,
 								$items['productId'],
 								$items['amount'],
 								$clientAmount,
@@ -229,6 +287,9 @@ class Home extends MY_Controller
 							);
 							if(isset($data['status']))
 							{
+								//Billing Records Enikma Style
+								$this->products->billingRecords($items['clientPhone'],$ExternalID,$gen_code,$card_id,$v_balance,$TotalAmountIncExtraCharge, $extratax, $v_balance, $product->PROD_TYPE_ID, $prod_provider, $prod_id, $card_id, $product->PROD_NAME);
+								
 								$name = isset($items['name']) ? $items['name'] : NULL;
 								// La transacción fue exitosa o está pendiente de aprobación, de cualquier forma inserto el teléfono.
 								$this->phonebook->addPhone($items['clientPhone'], $items['productId'], $items['phone'], $name);
@@ -267,6 +328,10 @@ class Home extends MY_Controller
 							}
 							if(isset($data['status']))
 							{
+								//Billing Records Enikma Style
+								$this->products->billingRecords($items['clientPhone'],$ExternalID,$gen_code,$card_id,$v_balance,$TotalAmountIncExtraCharge, $extratax, $v_balance, $product->PROD_TYPE_ID, $prod_provider, $prod_id, $card_id, $product->PROD_NAME);
+								
+								
 								$name = isset($items['name']) ? $items['name'] : NULL;
 								// La transacción fue exitosa o está pendiente de aprobación, de cualquier forma inserto el teléfono.
 								$this->phonebook->addPhone($items['clientPhone'], $items['productId'], $items['phone'], $name);
@@ -288,6 +353,9 @@ class Home extends MY_Controller
 							);
 							if(isset($data['status']))
 							{
+								//Billing Records Enikma Style
+								$this->products->billingRecords($items['clientPhone'],$ExternalID,$gen_code,$card_id,$v_balance,$TotalAmountIncExtraCharge, $extratax, $v_balance, $product->PROD_TYPE_ID, $prod_provider, $prod_id, $card_id, $product->PROD_NAME);
+								
 								$name = isset($items['name']) ? $items['name'] : NULL;
 								// La transacción fue exitosa o está pendiente de aprobación, de cualquier forma inserto el teléfono.
 								$this->phonebook->addPhone($items['clientPhone'], $items['productId'], $items['phone'], $name);
@@ -310,6 +378,9 @@ class Home extends MY_Controller
 							{
 								if($data['status'] == 'Success' || $data['status'] == 'Pending')
 								{
+									//Billing Records Enikma Style
+									$this->products->billingRecords($items['clientPhone'],$ExternalID,$gen_code,$card_id,$v_balance,$TotalAmountIncExtraCharge, $extratax, $v_balance, $product->PROD_TYPE_ID, $prod_provider, $prod_id, $card_id, $product->PROD_NAME);
+								
 									$name = isset($items['name']) ? $items['name'] : NULL;
 									// La transacción fue exitosa o está pendiente de aprobación, de cualquier forma inserto el teléfono.
 									$this->phonebook->addPhone($items['clientPhone'], $items['productId'], $items['phone'], $name);
@@ -318,6 +389,7 @@ class Home extends MY_Controller
 							break;
 						case 'DPPINLESS':
 							$data['provider'] = 'DPPINLESS';
+							$product->providerId ="DPPINLESS";
 							// Calculo la ganancia del cliente.
 							$profit = (float)$product->defaultProfit * $clientAmount / 100;
 							$profit = number_format($profit, 2);
@@ -351,6 +423,10 @@ class Home extends MY_Controller
 								{
 									if($transInfo['status'] == 'Success' || $transInfo['status'] == 'Pending')
 									{
+										//Billing Records Enikma Style
+										$this->products->billingRecords($items['clientPhone'],$ExternalID,$gen_code,$card_id,$v_balance,$TotalAmountIncExtraCharge, $extratax, $v_balance, $product->PROD_TYPE_ID, $prod_provider, $prod_id, $card_id, $product->PROD_NAME);
+								
+										
 										$name = isset($items['name']) ? $items['name'] : NULL;
 										// La transacción fue exitosa o está pendiente de aprobación, de cualquier forma inserto el teléfono.
 										$this->phonebook->addPhone($items['clientPhone'], $items['productId'], $items['phone'], $name);
@@ -376,7 +452,7 @@ class Home extends MY_Controller
 							}
 							break;
 						default:
-							$data['error'] = lang('error_provider_no_configurated').$product->name.'.';
+							$data['error'] = lang('error_provider_no_configurated').$product->PROD_NAME.'.';
 					}
 				}
 				else
@@ -403,26 +479,26 @@ class Home extends MY_Controller
 				}
 			}
 		}
-		$data['max'] = $max;
+		
+		
+		
+		
+//		$data['max'] = $max;
 		$data['title'] = 'Home';
 		$data['clientPhone'] = $items['clientPhone'];
 		// Traigo el listado de países activos.
-		$countries = $this->country->getAll('a');
+		$countries = $this->country->getAll('1');
 		$ids = $preferred = $defaultCountry = '';
 		foreach($countries as $country)
 		{
-			$ids .= '"'.$country->id.'", ';
-			if($country->preferred == 'Yes')
-			{
-				$preferred .= '"'.$country->id.'", ';
-				if($defaultCountry == '')
-				{
-					$defaultCountry = $country->id;
-				}
-			}
+			$ids .= '"'.$country->ISO2_CODE.'", ';
 		}
+		$data['ids'] = substr($ids, 0, -2);  // Quito la última coma.
+		$data['preferred'] = substr($ids, 0, -2);
+		$data['max'] = '1000';
+				
 		// Traigo los productos activos del país por defecto.
-		$data['products'] = $this->product->getAll($defaultCountry, TRUE);
+		$data['products'] = $this->products->getAll($defaultCountry, TRUE);
 		foreach($data['products'] as &$product)
 		{
 			$product->values = $product->type == 'f' ? $product->fixed : $product->rangeMin.','.$product->rangeMax;
@@ -494,6 +570,13 @@ class Home extends MY_Controller
 				// El TransId es positivo, quiere decir que el servidor aceptó la petición, ahora determinamos el estado.
 				$params = array('TransID' => $response->TopUpRequestResult->TransId);
 				$status = $client->TopupConfirm($params);
+				
+				/* testing data
+				$status->TopupConfirmResult->ErrorCode = 0;
+				$status->TopupConfirmResult->Status ='Success';
+				$response->TopUpRequestResult->TransId = '121515';
+				*/
+				
 				if($status->TopupConfirmResult->ErrorCode == 0)
 				{
 					switch($status->TopupConfirmResult->Status)
@@ -528,9 +611,13 @@ class Home extends MY_Controller
 							$data['status'] = $status->TopupConfirmResult->Status;
 							if($status->TopupConfirmResult->Status == 'Success')
 							{
+								//billingRecords
+								
 								// Actualizo el balance del cliente.
-								$this->client->updateBalance($_SESSION['userId'], $due);
+							//	$this->client->updateBalance($_SESSION['userId'], $due);
 								// Envío los mensajes de texto.
+								
+								//send sms
 								$this->load->library('twilio');
 								$this->twilio->sendSMS($clientPhone);  // Pagador.
 								$this->twilio->sendSMS($phone);  // Receptor.
@@ -599,11 +686,12 @@ class Home extends MY_Controller
 		$data = array();
 
 		$this->load->model('transaction');
-		$this->load->model('product');
+		$this->load->model('products');
 
 		$transaction = $this->transaction->getById($id);
-		$product = $this->product->getById($transaction->productId);
-
+		$product = $this->products->getById($transaction->productId);
+		
+		$product->isPIN = 0;
 		if($product->isPIN)
 		{
 			$dollarPhoneCtrl = new DollarPhoneProviderController($this);
@@ -704,8 +792,9 @@ class Home extends MY_Controller
 	{
 		$p = array();
 		$this->load->model('phonebook');
-		$this->load->model('product');
+		$this->load->model('products');
 		$phones = $this->phonebook->getAll($clientPhone);
+
 		foreach($phones as $phone)
 		{
 			if($phone->image != '' && is_file(UPLOADS_DIR.$phone->image))
@@ -716,7 +805,36 @@ class Home extends MY_Controller
 			{
 				$image = '';
 			}
-			$name = $phone->productName.' ('.strtoupper($phone->countryId).')';
+			$name = $phone->name.' ('.strtoupper($phone->countryId).')';
+			
+			$cards = $this->products->getCards($phone->productId,1,'online');
+			
+			$phone->rangeMin = '1';
+			$phone->rangeMax = '100';
+			$denomination_amount = 0;
+			$card_face_arr = array();
+			$card_ids_arr = array();
+			if(!empty($cards)){
+				foreach($cards as $card){
+					if($card->FACE_VALUE != ''){
+						$denomination_amount = $denomination_amount + $card->FACE_VALUE;
+						$card_face_arr[] = $card->CARD_ID."|".$card->FACE_VALUE;
+					}
+					$card_ids_arr[]  = $card->CARD_ID;
+				}
+			}
+			
+			if($denomination_amount > 0){
+				$phone->fixed = implode($card_face_arr,",");
+				$phone->card_ids = implode($card_ids_arr, ",");
+				$phone->type ='f';
+			}else{
+				$phone->type ='r';
+				$phone->fixed = '';
+				$phone->card_ids = implode($card_ids_arr, ",");
+			}	
+			
+			
 			$values = $phone->type == 'f' ? $phone->fixed : $phone->rangeMin.','.$phone->rangeMax;
 			$phone_data = array(
 				'name' => $phone->name,
@@ -728,10 +846,9 @@ class Home extends MY_Controller
 				'values' => $values
 			);
 
-			$product = $this->product->getById($phone->productId);
 
-			$phone_data['serviceCharge'] = $product ? (float) $product->serviceCharge : 0;
-			$phone_data['includeCharge'] = $product ? (float) $product->includeCharge : 0;
+			$phone_data['serviceCharge'] = 0;
+			$phone_data['includeCharge'] = 0;
 
 			$p[] = $phone_data;
 		}
@@ -748,25 +865,29 @@ class Home extends MY_Controller
 	public function getProducts($countryId)
 	{
 		$p = array();
-		$this->load->model('product');
-		$products = $this->product->getAll($countryId, TRUE);
+		$this->load->model('products');
+		$products = $this->products->getAll($countryId, TRUE);
 		foreach($products as $product)
 		{
 			$values = $product->type == 'f' ? $product->fixed : $product->rangeMin.','.$product->rangeMax;
 
-			$charge = $product->serviceCharge + (($product->includeCharge > 0) ? $product->includeCharge : 0);
-
+			$charge = $product->PROD_FEE;//$product->serviceCharge + (($product->includeCharge > 0) ? $product->includeCharge : 0);
+			//echo '<pre>';
+		//	print_r($product);
+			//exit;
+			$product->prod_code = '5';	
 			$p[] = array(
-				'id' => $product->id,
-				'isPIN' => $product->isPIN,
-				'isUnlimited' => $product->isUnlimited,
-				'allowOpenAmount' => $product->allowOpenAmount,
-				'showAsList' => $product->showAsList,
-				'mnc' => $product->mnc,
-				'name' => $product->name,
+				'id' => $product->PROD_ID,
+				'isPIN' => $product->ACC_PIN_REQ,
+				'isUnlimited' => '0',
+				'allowOpenAmount' => '0',
+				'showAsList' => '0',
+				'mnc' => $product->prod_code,
+				'name' => $product->PROD_NAME,
 				'image' => $product->image,
 				'type' => $product->type,
 				'values' => $values,
+				'card_ids' => $product->card_ids,
 				'charge' => $charge
 			);
 		}
@@ -792,7 +913,7 @@ class Home extends MY_Controller
 	{
 		ini_set('max_execution_time', 150);
 		$data = array();
-		$this->load->model('client');
+		//$this->load->model('client');
 		$this->load->model('provider');
 		$this->load->library('encryption');
 		$provider = $this->provider->getById('PREPAYNAT');
@@ -854,7 +975,7 @@ class Home extends MY_Controller
 				$trans = array('transId' => $response->orderResponse->invoice->invoiceNumber, 'status' => 'Success');
 				$data['status'] = 'Success';
 				// Actualizo el balance del cliente.
-				$this->client->updateBalance($_SESSION['userId'], $due);
+			//	$this->client->updateBalance($_SESSION['userId'], $due);
 				// Envío los mensajes de texto.
 				$this->load->library('twilio');
 				$this->twilio->sendSMS($clientPhone);  // Pagador.
@@ -1095,4 +1216,14 @@ class Home extends MY_Controller
 		}
 		return $r;
 	}
+		
+	
+	public function addBillingData()
+	{
+		$r = array();
+		// Listado de transacciones recientes.
+		$r['tr'] = array();
+		$this->load->model('products');
+		$topups = $this->products->billingRecords();
+	}	
 }

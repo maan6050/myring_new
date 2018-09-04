@@ -38,7 +38,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		</div>
 		<table>
 			<thead>
-				<tr><th><?= lang('col_date'); ?></th><? if($_SESSION['userType'] != STORE){ ?><th>Store</th><? } ?><th><?= lang('col_phone'); ?></th><th><?= lang('col_product'); ?></th><th><?= lang('col_total'); ?></th><th><?= lang('col_due'); ?></th><th><?= lang('col_fee'); ?></th><th><?= lang('col_transid'); ?></th><th><?= lang('col_status'); ?></th><th>&nbsp;</th></tr>
+				<tr><th><?= lang('col_date'); ?></th><? if($_SESSION['userType'] != "STORE"){ ?><th>Store</th><? } ?><th><?= lang('col_phone'); ?></th><th><?= lang('col_product'); ?></th><th><?= lang('col_total'); ?></th><th><?= lang('col_due'); ?></th><th><?= lang('col_fee'); ?></th><th><?= lang('col_transid'); ?></th><th><?= lang('col_status'); ?></th><th>&nbsp;</th></tr>
 			</thead>
 			<tbody><?
 				if(count($transactions) > 0)
@@ -47,7 +47,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					{ ?>
 						<tr>
 							<td><?= $t->created; ?></td><?
-							if($_SESSION['userType'] != STORE)
+							if($_SESSION['userType'] != "STORE")
 							{ ?>
 								<td><?= $t->name; ?></td><?
 							} ?>
@@ -101,7 +101,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					<tr><td colspan="10"><?= lang('no_trans_found'); ?></td></tr><?
 				} ?>
 				<tr>
-					<th colspan="<?= $_SESSION['userType'] != STORE ? '4' : '3'; ?>">Total &mdash; <em><?= count($transactions); ?> transactions</em></th><th align="right"><?= $totalAmount; ?></th><th align="right"><?= $totalDue; ?></th><th align="right"><?= $totalFee; ?></th><th colspan="3"></th>
+					<th colspan="<?= $_SESSION['userType'] != "STORE" ? '4' : '3'; ?>">Total &mdash; <em><?= count($transactions); ?> transactions</em></th><th align="right"><?= $totalAmount; ?></th><th align="right"><?= $totalDue; ?></th><th align="right"><?= $totalFee; ?></th><th colspan="3"></th>
 				</tr>
 			</tbody>
 		</table>

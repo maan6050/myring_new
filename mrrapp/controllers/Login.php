@@ -32,42 +32,56 @@ class Login extends MY_Controller {
 			$row = $this->customers->getEmployee($items['un'],$items['pw']);  // Ahora busco si es un cliente.
 			if(!empty($row))
 			{
+				// set cookie 
+				$this->load->helper('cookie');	
 				$row = $row[0];
 				//declare cookies variable
-				setcookie("user_company", $row->company, time() + (86400 * 30));
-				setcookie("user_status", $row->enabled, time() + (86400 * 30));
-				setcookie("user_ip", $row->ADDR, time() + (86400 * 30));
-				setcookie("user_account_id", $row->customer_enc, time() + (86400 * 30));
-				setcookie("user_customer", $row->UFIRST_NAME, time() + (86400 * 30));
-				setcookie("user_type", $row->group_enc, time() + (86400 * 30));
-				setcookie("user_name", $row->login_name, time() + (86400 * 30));
-				setcookie("THERMAL_RECEIPT", $row->THERMAL_RECEIPT, time() + (86400 * 30));
-				setcookie("CC_ENABLED", $row->CC_ENABLED, time() + (86400 * 30));
-				setcookie("Touch_screen", $row->TOUCHSCREEN, time() + (86400 * 30));	
+				set_cookie("user_company", $row->COMPANY, time() + (86400 * 30));
+				set_cookie("user_status", $row->ENABLED, time() + (86400 * 30));
+				//set_cookie("user_ip", $row->ADDR, time() + (86400 * 30));
+				set_cookie("user_ip", $_SERVER['REMOTE_ADDR'], time() + (86400 * 30));
+				set_cookie("user_account_id", $row->CUSTOMER_ENC, time() + (86400 * 30));
+				set_cookie("user_customer", $row->UFIRST_NAME, time() + (86400 * 30));
+				set_cookie("user_type", $row->USER_GROUP_ENC, time() + (86400 * 30));
+				set_cookie("user_name", $row->LOGIN_NAME, time() + (86400 * 30));
+				set_cookie("THERMAL_RECEIPT", $row->THERMAL_RECEIPT, time() + (86400 * 30));
+				set_cookie("CC_ENABLED", $row->CC_ENABLED, time() + (86400 * 30));
+				set_cookie("Touch_screen", $row->TOUCHSCREEN, time() + (86400 * 30));	
 				if (is_numeric($row->COUNTRY_CODE))
 				{
-					setcookie("country", $row->COUNTRY_CODE, time() + (86400 * 30));
+					set_cookie("country", $row->COUNTRY_CODE, time() + (86400 * 30));
 				}
 				else
 				{
-					setcookie("country", 1, time() + (86400 * 30));
+					set_cookie("country", 1, time() + (86400 * 30));
 				}
 				
-				setcookie("current_cur", "USD", time() + (86400 * 30));
-				setcookie("conversion_rate", "1", time() + (86400 * 30));
+				set_cookie("current_cur", "USD", time() + (86400 * 30));
+				set_cookie("conversion_rate", "1", time() + (86400 * 30));
 							
-				if (empty($row->ALLOW_PROD_TYPES)){
-					setcookie("user_prod_types", "0", time() + (86400 * 30));
+				if(empty($row->allow_prod_types)){
+					set_cookie("user_prod_types", "0", time() + (86400 * 30));
 				}else{
-					setcookie("user_prod_types", $row->ALLOW_PROD_TYPES, time() + (86400 * 30));
+					set_cookie("user_prod_types", $row->allow_prod_types, time() + (86400 * 30));
 				}
-
 				//declare session variables
 				$_SESSION['userId'] = $row->ACCOUNT_ID;
 				$_SESSION['userName'] = $row->LOGIN_NAME;
 				$_SESSION['userType'] = $row->USER_GROUP_NAME;
-				redirect(base_url('home'));
-				
+
+				if($_COOKIE['user_type'] == "956314127503977533") {
+					redirect(base_url('Customer/viewList'));
+				} else if($_COOKIE['user_type'] == "638545125236524578") {
+					redirect(base_url('Customer/viewList'));
+				} else if($_COOKIE['user_type'] == "325210258618165451") {
+					redirect(base_url('Customer/viewList'));
+				} else if($_COOKIE['user_type'] == "125458968545678354") {
+					redirect(base_url('Customer/viewList'));
+				}else if($_COOKIE['user_type'] == "415285967837575867") {
+					redirect(base_url('home'));
+				}else {
+					redirect(base_url('home'));
+				}
 			}
 			else
 				{

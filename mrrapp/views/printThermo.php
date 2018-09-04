@@ -32,7 +32,7 @@ $amountCalculated = ($transaction->includeCharge > 0) ? ($transaction->amount - 
 			<table class="printTable" width="90%">
 				<tr>
 					<th>SUPPLIER:</th>
-					<td><?= $product->name; ?></td>
+					<td><?= $product->PROD_NAME; ?></td>
 				</tr>
 				<tr>
 					<th>REFERENCE:</th>

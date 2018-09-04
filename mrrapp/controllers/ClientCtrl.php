@@ -12,7 +12,7 @@ class ClientCtrl extends MY_Controller
 		{
 			redirect(base_url('login'));
 		}
-		if($_SESSION['userType'] != STORE)  // El usuario no tiene permiso de ver este contenido.
+		if($_SESSION['userType'] != "STORE")  // El usuario no tiene permiso de ver este contenido.
 		{
 			redirect(base_url('home'));
 		}
@@ -144,6 +144,7 @@ class ClientCtrl extends MY_Controller
 			$data['from'] = $data['to'] = $data['status'] = '';
 			$data['transactions'] = $this->transaction->getByClientId($_SESSION['userId']);
 		}
+		
 		foreach($data['transactions'] as &$t)
 		{
 			$realTopup = ($t->amount - $t->includeCharge);
@@ -151,7 +152,8 @@ class ClientCtrl extends MY_Controller
 
 			$t->balance = number_format($t->amount - $t->profit, 2);
 			$t->product = $this->transaction->getProductName($t->productId);
-			$t->providerId = $this->transaction->getProviderId($t->productId);
+			$prod_provider_id = $this->transaction->getProviderId($t->productId);
+			$t->providerId = $this->transaction->getProviderName($prod_provider_id);
 			$data['totalAmount'] += $t->amount;
 			$data['totalDue'] += $t->balance;
 			$data['totalFee'] += $t->profit;

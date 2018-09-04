@@ -36,17 +36,18 @@ class Country extends CI_Model
 	public function getAll($status = NULL)
 	{
 		$this->db->select('*');
-		$this->db->order_by('status ASC, preferred DESC, name ASC');
+		$this->db->order_by('CTY_STATUS ASC, CTY_NAME ASC');
 		if(!is_null($status))
 		{
-			$this->db->where('status', $status);
+			$st=" CTY_STATUS='".$status."' AND ISO2_CODE !='' ";
+  			$this->db->where($st, NULL, FALSE); 
 		}
-		$query = $this->db->get('country');
+		$query = $this->db->get('country_list');
 		$rows = $query->result();
 		foreach($rows as &$row)
 		{
-			$row->preferred = $row->preferred == 'y' ? 'Yes' : 'No';
-			$row->status = $row->status == 'a' ? 'Active' : 'Inactive';
+			//$row->preferred = $row->preferred == 'y' ? 'Yes' : 'No';
+			$row->status = $row->CTY_STATUS == '1' ? 'Active' : 'Inactive';
 		}
 		return $rows;
 	}

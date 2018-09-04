@@ -58,13 +58,13 @@ class LogicalProviderController
 			'allow_consecutive_topups' => 0
 		);
 
-		$response = $this->callAPI('POST', 'topup_requests.json', $data);
+		//$response = $this->callAPI('POST', 'topup_requests.json', $data);
 
-		$response_code = getArrayValue($response, 'Response-Code');
+		//$response_code = getArrayValue($response, 'Response-Code');
 
 		if($response_code == 201)
 		{
-			if ($request_id = getArrayValue($response, 'request_id'))
+			if ($request_id = "21")// getArrayValue($response, 'request_id')
 			{
 				$user_id = $_SESSION['userId'];
 				// Calculo la ganancia del cliente.

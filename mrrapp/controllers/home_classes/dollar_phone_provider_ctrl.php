@@ -23,7 +23,7 @@ class DollarPhoneProviderController
 
 		$provider = $ctrl->provider->getById('DOLLARPHO');
 		$provider->password = $ctrl->encryption->decrypt($provider->password);
-
+		
 		try
 		{
 			$soap_client = new SoapClient($provider->url, array(
@@ -64,7 +64,7 @@ class DollarPhoneProviderController
 		{
 			$response_code = $response->TopUpRequestResult->responseCode;
 			$tx_id = $response->TopUpRequestResult->TransId;
-
+			
 			if ($response_code > 0 && $tx_id > 0)
 			{
 				$user_id = $_SESSION['userId'];

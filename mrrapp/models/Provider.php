@@ -59,7 +59,7 @@ class Provider extends CI_Model
 	public function getById($id)
 	{
 		$this->db->select('*');
-		$query = $this->db->get_where('provider', array('id' => $id));
+		$query = $this->db->get_where('provider_old', array('id' => $id));
 		return $query->row();
 	}
 

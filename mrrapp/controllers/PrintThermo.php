@@ -10,10 +10,10 @@ class PrintThermo extends CI_Controller
 
 	public function index($id)
 	{
-		$this->load->model('product');
+		$this->load->model('products');
 		$this->load->model('transaction');
 		$data['transaction'] = $this->transaction->getById($id);
-		$data['product'] = $this->product->getById($data['transaction']->productId);
+		$data['product'] = $this->products->getById($data['transaction']->productId);
 		// Determino si el producto tiene cargo por servicio y lo sumo.
 		if($data['transaction']->serviceCharge > 0)
 		{

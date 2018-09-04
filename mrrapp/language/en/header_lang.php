@@ -46,3 +46,14 @@ $lang['customer_report'] = 'Customer Report';
 $lang['payment_report'] = 'Payment Report';
 $lang['menu_web_content'] = 'Web Content';
 $lang['store_daily_promos'] = 'Store Daily Promos';
+$lang['add_customer_title'] = 'Add Customer';
+$lang['edit_customer_title'] = 'Edit Customer';
+
+/////////////////////////MASTER MENU////////////////
+$lang['distributers'] = 'Distributers';
+$lang['products'] = 'Products';
+$lang['product_plans'] = 'Product Plans';
+$lang['menu_bank'] = 'Bank';
+$lang['summary'] = 'Summary';
+$lang['historic'] = 'Historic';
+$lang['sales_by_distributers'] = 'Sales by Distributers';

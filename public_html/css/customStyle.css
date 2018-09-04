@@ -1,0 +1,426 @@
+/*
+Theme Name: My Ring Ring
+Author: Haggen IT - Diseño y desarrollo web
+Author URI: http://www.haggen-it.com/
+Version: 1.0
+*/
+/*---------------Header Custom Styles-----------------*/
+.navbar{
+    clear: both;
+    box-shadow: 3px 3px 3px #999;
+    margin: 0 0 30px 0;
+    background: #008AB7;
+    border-radius: 0px;
+    width: 100%;
+    display: inline-block;
+    border:none;
+}
+.navbar-header {
+    width:9.5%;
+}
+.navbar-brand {
+    height:auto;
+    width:100%;
+    padding: 10px 10px 10px 15px;
+}
+.navbar-toggle {
+    position: absolute;
+    right: 0px;
+    border: 1px solid #fff;
+    background: #008AB7;
+    z-index:999;
+}
+.navbar-toggle .icon-bar {
+    color: #fff;
+    background: #fff;
+}
+.navbar-brand > img {
+    width:100%;
+}
+.headerTopPhone {
+    float: left;
+    background: none;
+    font-size: 16px;
+    color: #FFF;
+    border-radius: 3px;
+}
+.headerTopPhone a {
+    color: #FFF;
+    font-weight: 700;
+}
+.headerTopPhone a:hover {
+    color: #FEBE10;
+    text-decoration: underline;
+}
+.headerTopAccounts{
+    float: right;
+    display: block;
+}
+.headerTopRight {
+    font-size: 13px;
+    color: #FFF;
+    margin: 15px 0px 0 0;
+    display: block;
+}
+.headerTopRight a {
+    color: #fff;
+}
+.headerTopRight a:hover {
+    color: #FEBE10;
+    text-decoration: underline;
+}
+.navbar-nav {
+    float: right;
+    margin: 45px 0 0 0;
+}
+.navbar-nav > li > a {
+    text-transform: uppercase;
+    color: #FFF;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 5px 5px 0 0;
+    transition: 0ms;
+}
+.navbar-nav > li > a:hover{
+    color:#333;
+    text-decoration: underline;
+    background: #FEBE10;
+}
+.nav .open > a, .nav .open > a:focus, .nav .open > a:hover {
+    background-color: #FEBE10;
+    color: #333;
+    text-decoration: underline;
+}
+.nav > li > a:focus, .nav > li > a:hover {
+    background-color: #FEBE10;
+    color: #333;
+}
+.dropdown-menu {
+    position: absolute;
+    top: 36px;
+    left: 0;
+    background: #FFF;
+    border-top: 3px solid #febe10;
+    z-index: 2;
+    box-shadow: 1px 3px 5px #999;
+    font-weight: normal;
+    transition: 0.3s ease;
+    display: none;
+    width: 183px;
+    border-radius: 0px;
+    padding:0px;
+}
+.dropdown {
+    padding: 0 26px 0 0;
+}
+.dropdown-menu li a{
+    display: block;
+    text-transform: none;
+    color: #333;
+    background: #F0F0F0;
+    margin: 5px;
+    padding: 0 15px;
+    font-weight: normal;
+    line-height: 32px;
+    min-width: 150px;
+    font-size: 13px;
+    transition: 0ms;
+}
+.dropdown-menu li:hover{
+    background: #febe10;
+}
+.dropdown-menu li a:hover{
+    background: #013a65;
+    color: #FFF !important;
+    text-decoration: underline;
+}
+.open .dropdown-menu {
+    display:block !important;
+}
+.open:hover .dropdown-toggle {
+    color:#333;
+    text-decoration: underline;
+    background: #FEBE10;
+}
+.collapse{
+    float: right;
+    padding: 0px;
+}
+.navbar-nav li:last-child{
+    padding-right: 0px;
+}
+/*---------------Content Custom Styles-----------------*/
+a:visited, a:focus{
+    text-decoration: none;
+    color: #013a65;
+}
+input[type=checkbox], input[type=radio] {
+    margin: 1px 0 0;
+}
+.error {
+    padding-left: 5px;
+}
+table{
+    font-size:13px;
+}
+.table th {
+    text-align: center;
+    background: #008AB7;
+    color: #fff;
+}
+table.dataTable thead {
+    text-align: center;
+    background: #008AB7;
+    color: #fff; 
+}
+table.dataTable thead .sorting_asc:after {
+    opacity: 0 !important;
+}
+table.dataTable thead .sorting:after {
+    opacity: 0 !important;
+} 
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0.5em 0em !important;
+    margin-left: 0px !important;
+    border: none !important;
+}
+.paginate_button:hover {
+    background: none !important;
+    background-color: none !important;
+}
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+    color: #6b6b6b !important;
+}
+table.dataTable.no-footer {
+    border-bottom: 1px solid #ddd !important;
+}
+table.dataTable thead th, table.dataTable thead td {
+    border-bottom: none !important;
+}
+.custom-td{
+    text-align:center;
+}
+label {
+    font-weight: 400;
+    font-size: 12px;
+}
+.table-container{
+    width:100%;
+    display:inline-block;
+    overflow-x: auto;
+}
+.marginBottom10px {
+    margin-bottom: 10px;
+}
+.page-title{
+    color: #6b6b6b;
+    font-size: 28px;
+    line-height: 32px;
+    font-weight: 300;
+    letter-spacing: -1px;
+    margin: 5px 0;
+}
+.myRingButton{
+    background-color:#e77817;
+    border:none;
+    display: inline-block;
+    padding: 8px 12px 6px 12px;
+    border-radius: 5px;
+    color: #fff;
+    text-align: center;
+    margin: 0px 0px 10px 0px;
+    font-size: 15px;
+}
+.myRingButton:visited, .myRingButton:focus{
+    color:#fff;
+}
+.marginLeft10px{
+    margin-left: 10px;
+}
+.marginTop10px{
+    margin-top: 10px;
+}
+#lessDiscount {
+    display:none;
+}
+/* .btn {
+    border:none;
+}
+.btn:focus, .btn:active {
+    border:none;
+} */
+.btn-default.btn-on.active{
+    background-color: #5BB75B;color: white;
+}
+.btn-default.btn-off.active{
+    background-color: #DA4F49;color: white;
+}
+.myRingButton:hover{
+    background-color: #ff7505;
+    border: none;
+    text-decoration: none;
+    color: #fff;
+}
+.tableSearchBox{
+    margin-bottom: 10px;
+    width: 53%;
+    float: right;
+}
+.form-group {
+    margin-bottom: 10px;
+}
+.form-control {
+    font-size: 13px;
+}
+.titulos_forms_blue {
+    padding: 5px 0px 5px 5px;
+    background-color: #008AB7 !important;
+    font-family: arial,helvetica;
+    color: #fff;
+    font-style: italic;
+    font-size: 12px !important;
+    font-weight: bold;
+    margin: 10px 0 10px 0px;
+}
+.alert_message_container {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    transition: all 0.8s ease-in-out;
+    padding: 10px;
+    top: -100px;
+}
+.alert_message{
+    box-shadow: green 0px 0px 2px 0px;
+    background: green;
+    opacity: 0;
+    margin-top: -100px;
+    display: inline-block;
+    transition: all 0.8s ease-in-out;
+    padding: 10px;
+}
+.input-container {
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    width: 100%;
+    margin-bottom: 15px;
+}
+.input-container .form-control{
+    text-indent: 35px;
+}
+.input_custom_icon {
+    padding: 6px 12px;
+    background: #d1d1d1;
+    color: white;
+    position: absolute;
+    text-align: center;
+    height: 34px;
+}
+.fa {
+    color:#008AB7;
+}
+/*----------------------------------FOOTER STYLES------------------*/
+.footer-container{
+    height: 50px;
+    background: #008AB7;
+    color: #fff;
+    width: 100%;
+    display: block;
+    margin-top: 20px;
+}
+@media (max-width: 1199px) {
+    .dropdown {
+        padding: 0 10px 0 0 !important;
+    }
+    .navbar-nav li:last-child{
+        padding-right: 0px !important;
+    }
+    .headerTopPhone {
+        font-size: 14px !important;
+    }
+    .navbar-nav > li > a {
+        font-size: 14px !important;
+    }
+    .navbar-header {
+        width: 11% !important;
+    }
+}
+@media (max-width: 991px) {
+    .dropdown {
+        padding: 0 0px 0 0 !important;
+    }
+    .dropdown-toggle {
+        font-size: 13px !important;
+    }
+    .headerTopPhone {
+        font-size: 13px !important;
+        margin: 15px 0 0 15px !important;
+        padding: 0px !important;
+    }
+    .navbar-nav {
+        margin: 25px 0 0 0 !important;
+    }
+    .navbar-header {
+        width: 13% !important;
+    }
+}
+@media (max-width: 767px) {
+    .navbar-header {
+        width: 100% !important;
+        text-align: center !important;
+        margin: 0px !important;
+    }
+    .navbar-brand {
+        width: 100% !important; 
+    }
+    .navbar-brand > img {
+        width: 25% !important;
+        margin: 0 auto !important;
+    }
+    .headerTopPhone {
+        float: none !important;
+        margin: 0px !important;
+    }
+    .headerTopRight {
+        margin: 0px 0px 10px 0 !important; 
+        text-align: center !important;
+        width: 100% !important;
+        display: inline-block !important;
+    }
+    .myRingButton{
+        width:100%;
+    }
+    .tableSearchBox{
+        width: 100% !important;
+        float: none !important;
+    }
+    .headerTopAccounts {
+        float: none !important;
+    }
+    #myNavbar{
+        position: absolute;
+        top: 0;
+        width: 100%;
+        float: none !important;
+        background: rgba(255,255,255,0.9);
+        box-shadow: 0px 0px 5px 0px #000;
+        z-index: 99;
+    }
+    .navbar-nav {
+        float: None !important;
+        margin: 15px 0 0 0 !important;
+    }
+    .navbar-nav > li > a {
+        color: #008AB7 !important;
+        border-bottom: 1px solid #ddd !important;
+    }
+    .marginLeft10px {
+        margin-left: 0px !important;
+    }
+}
+@media (min-width: 768px) {
+    .modal-dialog {
+        width: 500px !important;
+    }
+}

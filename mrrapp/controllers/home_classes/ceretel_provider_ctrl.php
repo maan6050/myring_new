@@ -70,11 +70,11 @@ class CeretelProviderController
 					{
 						$user_id = $_SESSION['userId'];
 						// Calculo la ganancia del cliente.
-						$profit = (float)$profitPercent['profit'] * $amount / 100;
-						$profit = number_format($profit, 2);
+					//	$profit = (float)$profitPercent['profit'] * $amount / 100;
+					//	$profit = number_format($profit, 2);
 						// Calculo la ganancia del vendedor y la empresa.
-						$userProfit = (float)$profitPercent['userProfit'] * $amount / 100;
-						$companyProfit = (float)$profitPercent['companyProfit'] * $amount / 100;
+					//	$userProfit = (float)$profitPercent['userProfit'] * $amount / 100;
+					//	$companyProfit = (float)$profitPercent['companyProfit'] * $amount / 100;
 						// Registro la transacción.
 						$data['id'] = $ctrl->transaction->create(array(
 							'clientId' => $user_id,
@@ -84,9 +84,9 @@ class CeretelProviderController
 							'amount' => $amount,
 							'serviceCharge' => $serviceCharge,
 							'includeCharge' => $includeCharge,
-							'profit' => $profit,
-							'userProfit' => $userProfit,
-							'companyProfit' => $companyProfit,
+							'profit' => 0,
+							'userProfit' => 0,
+							'companyProfit' => 0,
 							'transId' => $tx_id,
 							'status' => 'Pending'
 						));

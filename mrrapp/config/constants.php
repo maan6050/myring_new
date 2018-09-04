@@ -96,6 +96,6 @@ define('ADMIN', 'a');
 define('SELLER', 's');
 define('STORE', 'r');
 define('CUSTOMER', 'c');
-define('UPLOADS', 'uploads'.DIRECTORY_SEPARATOR);
+define('UPLOADS', 'uploads/'.DIRECTORY_SEPARATOR);
 define('UPLOADS_DIR', getcwd().DIRECTORY_SEPARATOR.UPLOADS);
 define('TINYMCE_APIKEY', 'govz16zs7sobxhqhq8swk2nnkl1jfkx9zuawpz0yvxhuypu0'); // Api key to TinyMCE Editor.

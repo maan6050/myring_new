@@ -85,8 +85,44 @@ function getArrayValue($obj, $name, $default = FALSE)
 	return ($value !== '@NF@') ? $value : $default;
 }
 
+function getCurrentUserBalance()
+{
+
+	$CI = &get_instance();
+	$CI->load->model('customers');
+
+	$result = $CI->customers->getHeaderInfo();
+	
+	$available = $balance = 0;
+
+		//$available = ($result->maxBalance - $result->balance);
+	$balance = (float)$result[0]->BALANCE;
+	return (object)array(
+		//'available' => $available,
+		'balance' => $balance,
+		'show' => TRUE
+	);
+/*
+SELECT
+				C.COMPANY, A.BALANCE, A.CREDIT_LIMIT, U.FIRST_NAME , U.LAST_NAME, (SELECT SUM(BALANCE) FROM ACCOUNTS WHERE PARENT_ACCOUNT_ID = '#cookie.user_account_id#'  AND BALANCE > 0) AS TOTALSUM
+			FROM 
+				USERS U 
+				LEFT JOIN CUSTOMERS C
+	ON (C.CUSTOMER_ENC = U.CUSTOMER_ID_ENC)
+					LEFT JOIN 
+						ACCOUNTS A 
+							ON (U.CUSTOMER_ID_ENC = A.ACCOUNT_ENC) 
+			WHERE 
+				U.CUSTOMER_ID_ENC = '#cookie.user_account_id#'
+			AND	
+				U.LOGIN_NAME = '#cookie.user_name#'
+*/
+
+}
+
 function getBalanceStore()
 {
+
 	if($_SESSION['userType'] !== STORE)
 	{
 		return (object)array(

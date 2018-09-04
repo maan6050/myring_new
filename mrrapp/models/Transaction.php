@@ -339,8 +339,8 @@ class Transaction extends CI_Model
 	 */
 	public function getProductName($productId)
 	{
-		$this->db->select('name');
-		$query = $this->db->get_where('product', array('id' => $productId));
+		$this->db->select('prod_name as name');
+		$query = $this->db->get_where('products', array('prod_id' => $productId));
 		$row = $query->row();
 		if($row)
 		{
@@ -358,8 +358,23 @@ class Transaction extends CI_Model
 	 */
 	public function getProviderId($productId)
 	{
-		$this->db->select('providerId');
-		$query = $this->db->get_where('product', array('id' => $productId));
+		$this->db->select('prod_provider');
+		$query = $this->db->get_where('products', array('prod_id' => $productId));
+		$row = $query->row();
+		if($row)
+		{
+			return $row->prod_provider;
+		}
+		else
+		{
+			return 'Not found.';
+		}
+	}
+	
+	public function getProviderName($provider_id)
+	{
+		$this->db->select('N_PROVIDER as providerId');
+		$query = $this->db->get_where('provider', array('np_id' => $provider_id));
 		$row = $query->row();
 		if($row)
 		{
@@ -370,6 +385,7 @@ class Transaction extends CI_Model
 			return 'Not found.';
 		}
 	}
+	
 
 	/**
 	 * getSpecialInvoice

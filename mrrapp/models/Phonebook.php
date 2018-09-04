@@ -61,9 +61,9 @@ class Phonebook extends CI_Model
 	 */
 	public function getAll($clientPhone)
 	{
-		$this->db->select('ph.phone, ph.productId, ph.name, countryId, pr.name AS productName, image, type, fixed, rangeMin, rangeMax');
+		$this->db->select('ph.phone, ph.productId, ph.name, PROD_CODE_MAIN as countryId, pr.prod_name AS productName, PROD_SMALL_PIC as image');
 		$this->db->from('phonebook AS ph');
-		$this->db->join('product AS pr', 'ph.productId = pr.id', 'left');
+		$this->db->join('products AS pr', 'ph.productId = pr.prod_id', 'left');
 		$this->db->where('clientPhone', $clientPhone);
 		$this->db->order_by('ph.name', 'asc');
 		$this->db->limit(20);

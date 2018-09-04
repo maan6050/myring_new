@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 if(isset($error) || isset($status))
 { ?>
 	<div id="msg" class="phonePane"><?
@@ -199,7 +198,8 @@ if(isset($error) || isset($status))
 		else
 		{ ?>
 			<p class="shoppingEmptyCart"><?= lang('cart_no_topup'); ?></p><?
-		} ?>
+		} 
+		?>
 	</div>
 	<div class="shoppingCartFooter">
 		<div class="span7">Total</div>
@@ -562,7 +562,7 @@ if(isset($error) || isset($status))
 				// Valores abiertos en un rango.
 				var range = $(this).attr('data-values').split(',');
 				var placeholder = 'Between ' + range[0] + ' and ' + range[1];
-				$('#typeDiv').append('<input type="number" name="amount" id="amount" placeholder="' + placeholder + '" value="" required>');
+				$('#typeDiv').append('<input type="number" name="amount" id="amount" placeholder="' + placeholder + '" value="" required><input type="hidden" name="card_id" id="card_id" value="'+$(this).attr('data-card_ids')+'" >');
 				// Adiciono las validaciones del rango.
 				$('#amount').rules('remove', 'min max');
 				/*$('#amount').rules('add', {
@@ -603,6 +603,7 @@ if(isset($error) || isset($status))
 				+ '" data-type="' + item.type
 				+ '" data-values="' + item.values
 				+ '" data-charge="' + item.charge
+				+ '" data-card_ids="' + item.card_ids
 				+ '" class="hide productBox">'
 				+ '<a class="productBtn">'
 				+ item.image
